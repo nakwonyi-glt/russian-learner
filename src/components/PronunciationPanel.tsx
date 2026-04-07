@@ -7,7 +7,7 @@ export function PronunciationPanel() {
   const [accuracy, setAccuracy] = useState<number | null>(null);
   const [mode, setMode] = useState<'practice' | 'result'>('practice');
   const { speak, speaking } = useTTS();
-  const { transcript, recording, supported, start, stop, reset } = useSpeechRecognition();
+  const { transcript, recording, supported, error, start, stop, reset } = useSpeechRecognition();
 
   const current = vocabulary[currentIndex % vocabulary.length];
 
@@ -107,6 +107,13 @@ export function PronunciationPanel() {
               </>
             )}
           </button>
+
+          {/* 오류 메시지 */}
+          {error && (
+            <div className="p-3 bg-red-50 rounded-xl border border-red-200">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          )}
 
           {/* 인식된 텍스트 */}
           {(transcript || recording) && (

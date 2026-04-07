@@ -1,0 +1,18 @@
+{
+  "name": "러시아어 학습",
+  "short_name": "러시아어",
+  "description": "한국어-러시아어 번역, 단어장, 발음 연습",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f3ff",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

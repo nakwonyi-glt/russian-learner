@@ -64,12 +64,14 @@ export function useSpeechRecognition() {
   const [transcript, setTranscript] = useState('');
   const [recording, setRecording] = useState(false);
   const [supported] = useState(() => getSpeechRecognition() !== null);
+  const [error, setError] = useState('');
   const recognitionRef = useRef<ISpeechRecognition | null>(null);
 
   const start = useCallback(() => {
     const SR = getSpeechRecognition();
     if (!SR) return;
 
+    setError('');
     const recognition = new SR();
     recognition.lang = 'ru-RU';
     recognition.continuous = false;
@@ -88,7 +90,14 @@ export function useSpeechRecognition() {
     };
 
     recognition.onend = () => setRecording(false);
-    recognition.onerror = () => setRecording(false);
+    recognition.onerror = (e: Event) => {
+      setRecording(false);
+      const code = (e as SpeechRecognitionErrorEvent).error;
+      if (code === 'not-allowed') setError('마이크 권한이 거부되었습니다. 브라우저 주소창 옆 자물쇠 아이콘을 클릭해 마이크를 허용해 주세요.');
+      else if (code === 'no-speech') setError('음성이 감지되지 않았습니다. 마이크에 가까이 대고 다시 시도해 주세요.');
+      else if (code === 'network') setError('음성 인식에 인터넷 연결이 필요합니다.');
+      else setError(`음성 인식 오류: ${code}`);
+    };
 
     recognitionRef.current = recognition;
     recognition.start();
@@ -99,9 +108,9 @@ export function useSpeechRecognition() {
     setRecording(false);
   }, []);
 
-  const reset = useCallback(() => setTranscript(''), []);
+  const reset = useCallback(() => { setTranscript(''); setError(''); }, []);
 
-  return { transcript, recording, supported, start, stop, reset };
+  return { transcript, recording, supported, error, start, stop, reset };
 }
 
 // 발음 정확도 계산 (레벤슈타인 거리 기반)
