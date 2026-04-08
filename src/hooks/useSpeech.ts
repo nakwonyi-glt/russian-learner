@@ -42,7 +42,7 @@ interface ISpeechRecognition extends EventTarget {
   interimResults: boolean;
   onstart: (() => void) | null;
   onend: (() => void) | null;
-  onerror: (() => void) | null;
+  onerror: ((e: Event) => void) | null;
   onresult: ((e: SpeechRecognitionEvent) => void) | null;
   start(): void;
   stop(): void;
