@@ -80,24 +80,34 @@ export function VocabularyPanel({ showEnglish }: Props) {
       </div>
 
       <p className="text-sm text-gray-500">
-        {filtered.length}개 단어 · 카드를 탭하면 의미가 표시됩니다
+        {search ? `${filtered.length}개 단어 · 카드를 탭하면 의미가 표시됩니다` : `총 ${filtered.length}개 단어`}
       </p>
 
-      {/* 단어 카드 그리드 */}
-      <div className="grid grid-cols-2 gap-3">
-        {filtered.map(word => (
-          <WordCard
-            key={word.id}
-            word={word}
-            showEnglish={showEnglish}
-            isFlipped={flipped.has(word.id)}
-            onFlip={() => toggleFlip(word.id)}
-            onSpeak={() => speak(word.base)}
-          />
-        ))}
-      </div>
+      {/* 검색어 없을 때 안내 */}
+      {!search && (
+        <div className="text-center py-12 text-gray-400">
+          <p className="text-2xl mb-3">🔍</p>
+          <p>검색어를 입력하면 단어가 표시됩니다</p>
+        </div>
+      )}
 
-      {filtered.length === 0 && (
+      {/* 단어 카드 그리드 */}
+      {search && (
+        <div className="grid grid-cols-2 gap-3">
+          {filtered.map(word => (
+            <WordCard
+              key={word.id}
+              word={word}
+              showEnglish={showEnglish}
+              isFlipped={flipped.has(word.id)}
+              onFlip={() => toggleFlip(word.id)}
+              onSpeak={() => speak(word.base)}
+            />
+          ))}
+        </div>
+      )}
+
+      {search && filtered.length === 0 && (
         <div className="text-center py-12 text-gray-400">
           검색 결과가 없습니다
         </div>
