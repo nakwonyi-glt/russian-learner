@@ -49,7 +49,7 @@ JSON 형식:
     try {
       let fullText = '';
       const stream = await client.messages.stream({
-        model: 'claude-haiku-4-5',
+        model: 'claude-sonnet-4-5',
         max_tokens: 1024,
         system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],
