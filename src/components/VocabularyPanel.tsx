@@ -14,6 +14,8 @@ export function VocabularyPanel({ showEnglish }: Props) {
   const [flipped, setFlipped] = useState<Set<string>>(new Set());
   const { speak } = useTTS();
 
+  const isNonKoreanSearch = search.length > 0 && !/[가-힣]/.test(search);
+
   const filtered = useMemo(() => {
     return vocabulary.filter(w => {
       const matchCat = selectedCategory === '전체' || w.category === selectedCategory;
@@ -99,7 +101,7 @@ export function VocabularyPanel({ showEnglish }: Props) {
               key={word.id}
               word={word}
               showEnglish={showEnglish}
-              isFlipped={flipped.has(word.id)}
+              isFlipped={isNonKoreanSearch || flipped.has(word.id)}
               onFlip={() => toggleFlip(word.id)}
               onSpeak={() => speak(word.base)}
             />
